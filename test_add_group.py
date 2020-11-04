@@ -11,9 +11,7 @@ from group import Group
 class TestAddGroup(unittest.TestCase):
     def setUp(self):
         self.wd = webdriver.Chrome("C:\\Windows\\SysWOW64\\chromedriver86.exe")
-        self.wd.implicitly_wait(30)
-        # self.base_url = "https://www.google.com/"
-        # self.accept_next_alert = True
+        self.wd.implicitly_wait(10)
     
     def test_add_group(self):
         wd = self.wd
