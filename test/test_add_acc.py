@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from acc import Acc
-from application import Application
+from model.acc import Acc
+from fixture.application import Application
 import pytest
 
 # inicializator fixtyri
