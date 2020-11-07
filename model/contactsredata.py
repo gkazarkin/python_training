@@ -1,4 +1,4 @@
-class Acc:
+class ContactsRedata:
     def __init__(self, firstname, middlename, lastname, nickname, title, company, address, home, mobile, work, fax, email, email2, homepage,
                  bday, bmonth, byear, aday, amonth, ayear, phone2, adress2, notes):
         self.firstname = firstname
