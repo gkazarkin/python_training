@@ -1,16 +1,7 @@
 # -*- coding: utf-8 -*-
 from model.acc import Acc
-from fixture.application import Application
 import pytest
 from fixture.crt_acc import AccHelper
-
-# inicializator fixtyri
-@pytest.fixture()
-def app(request):
-    fixture = Application()
-    # ykazanie na to, kak razrushit fixtyry
-    request.addfinalizer(fixture.destroy)
-    return fixture
 
 def test_add_acc(app):
     app.session.login(username="admin", password="secret")
