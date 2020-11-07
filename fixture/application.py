@@ -1,5 +1,6 @@
 from selenium import webdriver
 # from selenium.webdriver.chrome.webdriver import WebDriver
+from fixture.session import SessionHelper
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
@@ -11,18 +12,7 @@ class Application:
         self.wd = webdriver.Chrome("C:\\Windows\\SysWOW64\\chromedriver86.exe")
         # self.wd = WebDriver()
         self.wd.implicitly_wait(20)
-
-    def login(self, username, password):
-        wd = self.wd
-        # open url page
-        wd.get("http://localhost/addressbook/")
-        wd.find_element_by_name("user").click()
-        wd.find_element_by_name("user").clear()
-        wd.find_element_by_name("user").send_keys(username)
-        wd.find_element_by_name("pass").click()
-        wd.find_element_by_name("pass").clear()
-        wd.find_element_by_name("pass").send_keys(password)
-        wd.find_element_by_xpath("//input[@value='Login']").click()
+        self.session = SessionHelper(self)
 
     def create_group(self, group):
         wd = self.wd
@@ -43,10 +33,6 @@ class Application:
         wd.find_element_by_name("submit").click()
         # return to groups page
         wd.find_element_by_link_text("group page").click()
-
-    def log_out(self):
-        wd = self.wd
-        wd.find_element_by_link_text("Logout").click()
 
 # test add_acc
     def check_add_acc(self):
