@@ -69,7 +69,7 @@ class ContactHelper:
         wd.find_element_by_name("ayear").send_keys(acc.ayear)
         wd.find_element_by_name("address2").click()
         wd.find_element_by_name("address2").clear()
-        wd.find_element_by_name("address2").send_keys(acc.adress2)
+        wd.find_element_by_name("address2").send_keys(acc.address2)
         wd.find_element_by_name("phone2").click()
         wd.find_element_by_name("phone2").clear()
         wd.find_element_by_name("phone2").send_keys(acc.phone2)
@@ -78,6 +78,7 @@ class ContactHelper:
         wd.find_element_by_name("notes").send_keys(acc.notes)
         wd.find_element_by_name("theform").click()
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
+        self.open_contacts_page()
 
     def check_added_contact(self):
         wd = self.app.wd
@@ -129,8 +130,16 @@ class ContactHelper:
         wd.find_element_by_name("selected[]").click()
         wd.find_element_by_css_selector("#content > form:nth-child(10) > div:nth-child(8) > input[type=button]").click()
         wd.switch_to_alert().accept()
+        self.open_contacts_page()
+
+    def open_contacts_page(self):
+        wd = self.app.wd
         wd.find_element_by_link_text("home").click()
 
+    def count_contacts(self):
+        wd = self.app.wd
+        self.open_contacts_page()
+        return len(wd.find_elements_by_name("selected[]"))
 
 
 
