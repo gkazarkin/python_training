@@ -9,13 +9,8 @@ class ContactHelper:
         wd = self.app.wd
         self.click_add_new_contact()
         self.fill_contact_form(data)
-        wd.find_element_by_name("theform").click()
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
         self.open_contacts_page()
-
-    def click_add_new_contact(self):
-        wd = self.app.wd
-        wd.find_element_by_link_text("add new").click()
 
     def check_added_contact(self):
         wd = self.app.wd
@@ -62,6 +57,10 @@ class ContactHelper:
         self.change_field_value("phone2", data.phone2)
         self.change_field_value("notes", data.notes)
 
+    def click_add_new_contact(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("add new").click()
+
     def select_date(self, field_name, date):
         wd = self.app.wd
         if date is not None:
@@ -85,7 +84,10 @@ class ContactHelper:
 
     def open_contacts_page(self):
         wd = self.app.wd
-        wd.find_element_by_link_text("home").click()
+        # Проверяем находимся ли мы уже на странице контактов и если нет, то переходим
+        if not (wd.current_url.endswith("addressbook/") and len(wd.find_elements_by_name("add")) > 0):
+            wd.find_element_by_link_text("home").click()
+
 
     def count_contacts(self):
         wd = self.app.wd
