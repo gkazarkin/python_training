@@ -1,8 +1,8 @@
 from selenium import webdriver
 # from selenium.webdriver.chrome.webdriver import WebDriver
-from fixture.session import SessionHelper
-from fixture.group import GroupHelper
-from fixture.contact import ContactHelper
+from fixture.session_methods import SessionHelper
+from fixture.group_methods import GroupHelper
+from fixture.contact_methods import ContactHelper
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select

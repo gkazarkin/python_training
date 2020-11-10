@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from model.contact import Contact
 import pytest
-from fixture.contact import ContactHelper
+from fixture.contact_methods import ContactHelper
 
 def test_add_contact(app):
     app.contact.add_new_contact(

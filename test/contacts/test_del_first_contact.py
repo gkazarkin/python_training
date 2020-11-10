@@ -1,6 +1,6 @@
 from model.contact import Contact
 import pytest
-from fixture.contact import ContactHelper
+from fixture.contact_methods import ContactHelper
 
 def test_add_acc(app):
     if app.contact.count_contacts() == 0:
