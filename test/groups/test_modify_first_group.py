@@ -21,7 +21,7 @@ def test_modify_group_header(app):
         app.group.create(Group(name="test"))
 
     old_groups = app.group.get_group_list()
-    group = Group(header="New header")
+    group = Group(name="New header")
     group.id = old_groups[0].id  # zapominaem id
     app.group.modify_first_group(group)
     new_groups = app.group.get_group_list()
