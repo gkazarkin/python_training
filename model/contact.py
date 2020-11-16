@@ -34,8 +34,8 @@ class Contact:
         return "%s:%s:%s" % (self.id, self.firstname, self.lastname)
 
     def __eq__(self, other):  # logi4eskoe sravnenie, vmesto sravnenie objectov v pamyati
-        # return (self.id is None or other.id is None or self.id == other.id) and self.firstname == other.firstname and self.lastname == other.lastname  # 2 contacts ravni esli sovpadaut lastname i id (daje esli id=None)
-        return self.id is None or other.id is None or self.id == other.id
+        return (self.id is None or other.id is None or self.id == other.id) and self.firstname == other.firstname and \
+               self.lastname == other.lastname  # 2 contacts ravni esli sovpadaut names
 
     def id_or_max(self):
         if self.id:

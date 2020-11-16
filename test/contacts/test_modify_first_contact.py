@@ -2,10 +2,10 @@ from model.contact import Contact
 import pytest
 from fixture.contact_methods import ContactHelper
 
-def test_modify_first_contact_home_number(app):
+def test_modify_first_contact_lastname(app):
     if app.contact.count_contacts() == 0:
         app.contact.add_new_contact(
-            Contact(firstname="Gleb", middlename="Alex", lastname="Kazarkin", nickname="gkazarkin", title="AccTitle",
+            Contact(firstname="Gleb", middlename="Alex", lastname="Kazarkin", nickname="testNickName", title="AccTitle",
                     company="TestCompany",
                     address="Yakovleva 5", home="515232", mobile="89539235812", work="367412", fax="89539234611",
                     email="gkazarkin@test.ru",
@@ -14,7 +14,7 @@ def test_modify_first_contact_home_number(app):
                     ayear="1987", address2="Yakovleva 5", phone2="515232", notes="Test Note"))
 
     old_contacts = app.contact.get_contact_list()
-    contact = Contact(lastname="Modified_lastname")
+    contact = Contact(firstname="Modif_firstname", lastname="Modif_lastname")
     contact.id = old_contacts[0].id  # zapominaem id
 
     app.contact.modify_first_contact(contact)

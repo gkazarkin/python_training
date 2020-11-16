@@ -100,11 +100,10 @@ class ContactHelper:
         wd.find_elements_by_name("entry")
         contacts = []
         for element in wd.find_elements_by_name("entry"):
-            firstname = wd.find_element_by_css_selector("#maintable > tbody > tr:last-child > td:nth-child(3)")
-            lastname = wd.find_element_by_css_selector("#maintable > tbody > tr:last-child > td:nth-child(2)")
+            firstname = wd.find_element_by_css_selector("#maintable > tbody > tr:last-child > td:nth-child(3)").text
+            lastname = wd.find_element_by_css_selector("#maintable > tbody > tr:last-child > td:nth-child(2)").text
             id = element.find_element_by_name("selected[]").get_attribute("value")
             contacts.append(Contact(firstname=firstname, lastname=lastname, id=id))
-            # contacts.append(Contact(id=id))
         return contacts
 
 
