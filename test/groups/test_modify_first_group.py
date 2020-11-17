@@ -11,7 +11,8 @@ def test_modify_group_name(app):
     group.id = old_groups[0].id  # zapominaem id
 
     app.group.modify_first_group(group)
-    assert len(old_groups) == app.group.count_groups()
+
+    assert len(old_groups) == app.group.count_groups()  # Выступает в роли хеширования количества групп
     new_groups = app.group.get_group_list()
     # assert len(old_groups) == len(new_groups)
     old_groups[0] = group

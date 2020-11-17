@@ -2,7 +2,7 @@ from model.contact import Contact
 import pytest
 from fixture.contact_methods import ContactHelper
 
-def test_add_acc(app):
+def test_delete_first_contact(app):
     if app.contact.count_contacts() == 0:
         app.contact.add_new_contact(
             Contact(firstname="Gleb", middlename="Alex", lastname="Kazarkin", nickname="gkazarkin", title="AccTitle",
@@ -14,10 +14,12 @@ def test_add_acc(app):
                     ayear="1987", address2="Yakovleva 5", phone2="515232", notes="Test Note"))
 
     old_contacts = app.contact.get_contact_list()
-    app.contact.del_first_contact()
+    app.contact.delete_first_contact()
 
+    # assert len(old_contacts) - 1 == app.contact.count_contacts()  #Hash
+    # new_contacts = app.contact.get_contact_list()
     new_contacts = app.contact.get_contact_list()
     assert len(old_contacts) - 1 == len(new_contacts)  # sravnenie razmerov group
 
-    old_contacts[0:1] = []  # virezat perviy element pod indexom 0
-    assert old_contacts == new_contacts
+    # old_contacts[0:1] = []  # virezat perviy element pod indexom 0
+    # assert old_contacts == new_contacts

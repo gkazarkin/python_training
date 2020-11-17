@@ -10,12 +10,9 @@ class ContactHelper:
         self.click_add_new_contact()
         self.fill_contact_form(data)
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
-        self.open_contacts_page()
 
-    def check_added_contact(self):
-        wd = self.app.wd
-        wd.find_element_by_link_text("next birthdays").click()
-        wd.find_element_by_xpath("//img[@alt='Details']").click()
+        self.open_contacts_page()
+        self.contact_cache is None
 
     def modify_first_contact(self, data):
         wd = self.app.wd
@@ -27,6 +24,17 @@ class ContactHelper:
         wd.find_element_by_name("update").click()
 
         wd.find_element_by_link_text("home page").click()
+        self.contact_cache is None
+
+    def delete_first_contact(self):
+        wd = self.app.wd
+        wd.find_element_by_name("selected[]").click()
+        wd.find_element_by_css_selector("#content > form:nth-child(10) > div:nth-child(8) > input[type=button]").click()
+        # wd.switch_to_alert().accept()
+        wd.switch_to.alert.accept()
+
+        self.open_contacts_page()
+        self.contact_cache is None
 
     def fill_contact_form(self, data):
         wd = self.app.wd
@@ -74,37 +82,34 @@ class ContactHelper:
             wd.find_element_by_name(field_name).clear()
             wd.find_element_by_name(field_name).send_keys(text)
 
-    def del_first_contact(self):
-        wd = self.app.wd
-        wd.find_element_by_name("selected[]").click()
-        wd.find_element_by_css_selector("#content > form:nth-child(10) > div:nth-child(8) > input[type=button]").click()
-        # wd.switch_to_alert().accept()
-        wd.switch_to.alert.accept()
-        self.open_contacts_page()
-
     def open_contacts_page(self):
         wd = self.app.wd
         # Проверяем находимся ли мы уже на странице контактов и если нет, то переходим
         if not (wd.current_url.endswith("addressbook/") and len(wd.find_elements_by_name("add")) > 0):
             wd.find_element_by_link_text("home").click()
 
-
     def count_contacts(self):
         wd = self.app.wd
         self.open_contacts_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    contact_cache = None  # Кеширование списка контактов, сбрасывается после добавления\удаления\модификации
+
     def get_contact_list(self):
-        wd = self.app.wd
-        self.open_contacts_page()
-        wd.find_elements_by_name("entry")
-        contacts = []
-        for element in wd.find_elements_by_name("entry"):
-            firstname = wd.find_element_by_css_selector("#maintable > tbody > tr:last-child > td:nth-child(3)").text
-            lastname = wd.find_element_by_css_selector("#maintable > tbody > tr:last-child > td:nth-child(2)").text
-            id = element.find_element_by_name("selected[]").get_attribute("value")
-            contacts.append(Contact(firstname=firstname, lastname=lastname, id=id))
-        return contacts
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.open_contacts_page()
+            wd.find_elements_by_name("entry")
+            self.contact_cache = []
+            for element in wd.find_elements_by_name("entry"):
+                # cells = element.find_elements_by_tag_name("td")
+                firstname = element.find_elements_by_tag_name("td")[2].text
+                lastname = element.find_elements_by_tag_name("td")[1].text
+                # firstname = wd.find_element_by_css_selector("#maintable > tbody > tr:last-child > td:nth-child(3)").text
+                # lastname = wd.find_element_by_css_selector("#maintable > tbody > tr:last-child > td:nth-child(2)").text
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                self.contact_cache.append(Contact(id=id, firstname=firstname, lastname=lastname))
+        return list(self.contact_cache)
 
 
 
