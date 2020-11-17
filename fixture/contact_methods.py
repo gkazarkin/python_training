@@ -14,27 +14,51 @@ class ContactHelper:
         self.open_contacts_page()
         self.contact_cache = None
 
-    def modify_first_contact(self, data):
+    def modify_contact_by_index(self, index, data):
         wd = self.app.wd
-        wd.find_element_by_css_selector("#maintable > tbody > tr:nth-child(2) > td:nth-child(7) > a").click()
-        wd.find_element_by_name("modifiy").click()
+        find_contacts = wd.find_elements_by_name("entry")
+        cells = find_contacts[index].find_elements_by_tag_name("td")
+        click_edit = cells[7].find_element_by_css_selector("a").click()
+        # wd.find_element_by_css_selector("#maintable > tbody > tr:nth-child(2) > td:nth-child(7) > a").click()
+        # wd.find_element_by_name("update").click()
 
         self.fill_contact_form(data)
-
         wd.find_element_by_name("update").click()
 
         wd.find_element_by_link_text("home page").click()
         self.contact_cache = None
 
-    def delete_first_contact(self):
+    def modify_first_contact(self, data):
+        self.modify_contact_by_index(0, data)
+
+    def delete_contact_by_index(self, index):
         wd = self.app.wd
-        wd.find_element_by_name("selected[]").click()
-        wd.find_element_by_css_selector("#content > form:nth-child(10) > div:nth-child(8) > input[type=button]").click()
+        self.select_contact_by_index(index)
+        click_delete = wd.find_element_by_css_selector("#content > form:nth-child(10) > div:nth-child(8) > input[type=button]").click()
         # wd.switch_to_alert().accept()
         wd.switch_to.alert.accept()
 
         self.open_contacts_page()
         self.contact_cache = None
+
+    def delete_first_contact(self):
+        self.delete_contact_by_index(0)
+        # wd = self.app.wd
+        # wd.find_element_by_name("selected[]").click()
+        # wd.find_element_by_css_selector("#content > form:nth-child(10) > div:nth-child(8) > input[type=button]").click()
+        # # wd.switch_to_alert().accept()
+        # wd.switch_to.alert.accept()
+        #
+        # self.open_contacts_page()
+        # self.contact_cache = None
+
+    def select_contact_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements_by_name("selected[]")[index].click()
+
+    def select_first_contact(self):
+        wd = self.app.wd
+        wd.find_element_by_name("selected[]").click()
 
     def fill_contact_form(self, data):
         wd = self.app.wd

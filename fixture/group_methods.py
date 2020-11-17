@@ -53,7 +53,7 @@ class GroupHelper:
         self.select_group_by_index(index)
 
         # submit deletion
-        wd.find_element_by_name("delete").click()
+        click_delete = wd.find_element_by_name("delete").click()
 
         self.return_to_groups_page()
         self.group_cache = None

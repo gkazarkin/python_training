@@ -1,6 +1,7 @@
 from model.contact import Contact
 import pytest
 from fixture.contact_methods import ContactHelper
+from random import randrange
 
 def test_delete_first_contact(app):
     if app.contact.count_contacts() == 0:
@@ -14,12 +15,13 @@ def test_delete_first_contact(app):
                     ayear="1987", address2="Yakovleva 5", phone2="515232", notes="Test Note"))
 
     old_contacts = app.contact.get_contact_list()
-    app.contact.delete_first_contact()
+    index = randrange(len(old_contacts))  # Генерируем случайный индекс от 0 до количества контактов
+    app.contact.delete_contact_by_index(index)
 
     # assert len(old_contacts) - 1 == app.contact.count_contacts()  #Hash
     # new_contacts = app.contact.get_contact_list()
     new_contacts = app.contact.get_contact_list()
-    assert len(old_contacts) - 1 == len(new_contacts)  # sravnenie razmerov group
+    assert len(old_contacts) - 1 == app.contact.count_contacts()  # sravnenie razmerov group
 
-    # old_contacts[0:1] = []  # virezat perviy element pod indexom 0
-    # assert old_contacts == new_contacts
+    old_contacts[index:index+1] = []
+    assert old_contacts == new_contacts
