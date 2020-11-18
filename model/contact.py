@@ -30,15 +30,15 @@ class Contact:
         self.notes = notes
         self.id = id
 
-    def __repr__(self):  # predstavlenie objecta v console
+    def __repr__(self):  # Представление объекта в консоли
         return "%s:%s:%s" % (self.id, self.firstname, self.lastname)
 
-    def __eq__(self, other):  # logi4eskoe sravnenie, vmesto sravnenie objectov v pamyati
+    def __eq__(self, other):  # Логическое сравнение, вместо сравнения объектов в памяти
         return (self.id is None or other.id is None or self.id == other.id) and self.firstname == other.firstname and \
-               self.lastname == other.lastname  # 2 contacts ravni esli sovpadaut names
+               self.lastname == other.lastname  # 2 контакта равны, если совпадают имена
 
     def id_or_max(self):
         if self.id:
             return int(self.id)
         else:
-            return maxsize  # maximalnoe 4islo, kotoroe mojet ispolzovatsya v indexah spiskov
+            return maxsize  # максимальное число, которое может использоваться в индексах списков

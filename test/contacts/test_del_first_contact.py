@@ -18,10 +18,10 @@ def test_delete_first_contact(app):
     index = randrange(len(old_contacts))  # Генерируем случайный индекс от 0 до количества контактов
     app.contact.delete_contact_by_index(index)
 
-    # assert len(old_contacts) - 1 == app.contact.count_contacts()  #Hash
+    # assert len(old_contacts) - 1 == app.contact.count_contacts()  # Hash
     # new_contacts = app.contact.get_contact_list()
     new_contacts = app.contact.get_contact_list()
-    assert len(old_contacts) - 1 == app.contact.count_contacts()  # sravnenie razmerov group
+    assert len(old_contacts) - 1 == app.contact.count_contacts()  # Сравнение размеров списков
 
     old_contacts[index:index+1] = []
     assert old_contacts == new_contacts

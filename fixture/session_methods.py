@@ -6,7 +6,7 @@ class SessionHelper:
 
     def login(self, username, password):
         wd = self.app.wd
-        # open url page
+        # open main url page
         wd.get("http://localhost/addressbook/")
 
         wd.find_element_by_name("user").click()
@@ -18,7 +18,7 @@ class SessionHelper:
 
         wd.find_element_by_xpath("//input[@value='Login']").click()
 
-    # Проверка залогинены ли уже
+    # Проверка залогинен ли уже
     def ensure_login(self, username, password):
         wd = self.app.wd
         if self.is_logged_in():

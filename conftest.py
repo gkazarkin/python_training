@@ -3,7 +3,7 @@ from fixture.application import Application
 
 fixture = None
 
-# inicializator fixtyri
+# Инициализатор фикстуры
 @pytest.fixture
 def app(request):
     global fixture
@@ -15,7 +15,7 @@ def app(request):
     fixture.session.ensure_login(username="admin", password="secret")
     return fixture
 
-# fixtyra stop
+# Фикстура остановки
 @pytest.fixture(scope="session", autouse=True)
 def stop(request):
     def fin():

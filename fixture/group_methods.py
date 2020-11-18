@@ -15,12 +15,12 @@ class GroupHelper:
         self.open_groups_page()
 
         # init groups page
-        wd.find_element_by_name("new").click()
+        click_new = wd.find_element_by_name("new").click()
 
         self.fill_group_form(group)
 
         # submit group creation
-        wd.find_element_by_name("submit").click()
+        click_submit = wd.find_element_by_name("submit").click()
 
         self.return_to_groups_page()
         self.group_cache = None
@@ -32,13 +32,13 @@ class GroupHelper:
         self.select_group_by_index(index)
 
         # open modification form
-        wd.find_element_by_name("edit").click()
+        click_edit = wd.find_element_by_name("edit").click()
 
         # fill group form
         self.fill_group_form(group)
 
         # submit modification
-        wd.find_element_by_name("update").click()
+        click_update = wd.find_element_by_name("update").click()
 
         self.return_to_groups_page()
         self.group_cache = None
@@ -63,11 +63,11 @@ class GroupHelper:
 
     def select_group_by_index(self, index):
         wd = self.app.wd
-        wd.find_elements_by_name("selected[]")[index].click()
+        checkbox = wd.find_elements_by_name("selected[]")[index].click()
 
     def select_first_group(self):
         wd = self.app.wd
-        wd.find_element_by_name("selected[]").click()
+        checkbox = wd.find_element_by_name("selected[]").click()
 
     def fill_group_form(self, data):
         self.change_field_value("group_name", data.name)
@@ -88,7 +88,7 @@ class GroupHelper:
 
     def return_to_groups_page(self):
         wd = self.app.wd
-        wd.find_element_by_link_text("group page").click()
+        click_groups = wd.find_element_by_link_text("group page").click()
 
     group_cache = None  # Кеширование списка групп, сбрасывается после добавления\удаления\модификации
 
@@ -96,11 +96,11 @@ class GroupHelper:
         if self.group_cache is None:
             wd = self.app.wd
             self.open_groups_page()
-            wd.find_elements_by_css_selector("span.group")  # v console $$('span.group') -> naiti elementi
+            wd.find_elements_by_css_selector("span.group")  # В консоли $$('span.group') -> найти элементы
             self.group_cache = []
             for element in wd.find_elements_by_css_selector("span.group"):
                 text = element.text
-                id = element.find_element_by_name("selected[]").get_attribute("value")
+                id = element.find_element_by_name("selected[]").get_attribute("value")  # У чекбокса находим value
                 self.group_cache.append(Group(name=text, id=id))
         return list(self.group_cache)
 
