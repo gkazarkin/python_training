@@ -1,5 +1,6 @@
 from selenium.webdriver.support.ui import Select
 from model.contact import Contact
+import re
 
 class ContactHelper:
     def __init__(self, app):
@@ -26,7 +27,10 @@ class ContactHelper:
                 lastname = cells[1].text
                 # id = row.find_element_by_name("selected[]").get_attribute("value")  # У чекбоксов находим value
                 id = cells[0].find_element_by_tag_name("input").get_attribute("value")
-                self.contact_cache.append(Contact(id=id, firstname=firstname, lastname=lastname))
+                all_phones = cells[5].text.splitlines()  # Делим все телефоны на строки в список
+                # print("contact's phones from main page = " + str(all_phones))  # = ['515232', '89539235812', '367412', '515232']
+                self.contact_cache.append(Contact(id=id, firstname=firstname, lastname=lastname, homephone=all_phones[0],
+                                                  mobilephone=all_phones[1], workphone=all_phones[2], secondaryphone=all_phones[3]))
         return list(self.contact_cache)
 
     def add_new_contact(self, data):
@@ -38,7 +42,14 @@ class ContactHelper:
         self.open_home_page()
         self.contact_cache = None
 
-    def open_contact_to_edit_by_index(self, index, data):
+    def open_contact_to_edit_by_index(self, index):
+        wd = self.app.wd
+        self.app.open_home_page()
+        row = wd.find_elements_by_name("entry")[index]
+        cell_to_edit = row.find_elements_by_tag_name("td")[7]
+        click_edit = cell_to_edit.find_element_by_tag_name("a").click()
+
+    def modify_contact_by_index(self, index, data):
         wd = self.app.wd
         self.open_contact_page_and_click_edit_contact(index)
 
@@ -47,13 +58,6 @@ class ContactHelper:
 
         click_home = wd.find_element_by_link_text("home page").click()
         self.contact_cache = None
-
-    def open_contact_page_and_click_edit_contact(self, index):
-        wd = self.app.wd
-        self.app.open_home_page()
-        row = wd.find_elements_by_name("entry")[index]
-        cell_to_edit = row.find_elements_by_tag_name("td")[7]
-        click_edit = cell_to_edit.find_element_by_tag_name("a").click()
 
     # def open_contact_to_edit_by_index(self, index, data):
     #     wd = self.app.wd
@@ -70,16 +74,37 @@ class ContactHelper:
 
     def open_contact_view_by_index(self, index):
         wd = self.app.wd
-        self.app.open_home_page()
+        self.open_home_page()
         row = wd.find_elements_by_name("entry")[index]
         cell = row.find_elements_by_tag_name("td")[6]
         click_view = cell.find_element_by_tag_name("a").click()
 
+    def get_contact_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.open_contact_to_edit_by_index(index)
+        firstname = wd.find_element_by_name("firstname").get_attribute("value")
+        lastname = wd.find_element_by_name("lastname").get_attribute("value")
+        id = wd.find_element_by_name("id").get_attribute("value")
+        homephone = wd.find_element_by_name("home").get_attribute("value")
+        workphone = wd.find_element_by_name("work").get_attribute("value")
+        mobilephone = wd.find_element_by_name("mobile").get_attribute("value")
+        secondaryphone = wd.find_element_by_name("phone2").get_attribute("value")
+        return Contact(firstname=firstname, lastname=lastname, id=id, homephone=homephone, workphone=workphone, mobilephone=mobilephone,
+                       secondaryphone=secondaryphone)  # Строим объект, 1 = название параметра, 2 = название локальной переменной
 
-
+    def get_contact_from_view_page(self, index):
+        wd = self.app.wd
+        self.open_contact_view_by_index(index)
+        text = wd.find_element_by_id("content").text  # Тут телефоны не идут отдельно, а идут скопом со всеми данными контакта
+        homephone = re.search("H: (.*)", text).group(1)  # Ищем строку, начинающуюся с H: и берём значение до переноса строки
+        workphone = re.search("W: (.*)", text).group(1)
+        mobilephone = re.search("M: (.*)", text).group(1)
+        secondaryphone = re.search("P: (.*)", text).group(1)
+        return Contact(homephone=homephone, workphone=workphone,
+                       mobilephone=mobilephone, secondaryphone=secondaryphone)  # Строим объект, 1 = название параметра, 2 = название локальной переменной
 
     def modify_first_contact(self, data):
-        self.open_contact_to_edit_by_index(0, data)
+        self.modify_contact_by_index(0, data)
 
     def delete_contact_by_index(self, index):
         wd = self.app.wd
@@ -111,10 +136,12 @@ class ContactHelper:
         self.change_field_value("title", data.title)
         self.change_field_value("company", data.company)
         self.change_field_value("address", data.address)
-        self.change_field_value("home", data.home)
-        self.change_field_value("mobile", data.mobile)
-        self.change_field_value("work", data.work)
+
+        self.change_field_value("home", data.homephone)
+        self.change_field_value("mobile", data.mobilephone)
+        self.change_field_value("work", data.workphone)
         self.change_field_value("fax", data.fax)
+
         self.change_field_value("email", data.email)
         self.change_field_value("email2", data.email2)
         self.change_field_value("homepage", data.homepage)
@@ -128,7 +155,7 @@ class ContactHelper:
         self.change_field_value("ayear", data.ayear)
 
         self.change_field_value("address2", data.address2)
-        self.change_field_value("phone2", data.phone2)
+        self.change_field_value("phone2", data.secondaryphone)
         self.change_field_value("notes", data.notes)
 
     def click_add_new_contact(self):

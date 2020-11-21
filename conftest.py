@@ -1,6 +1,7 @@
 import pytest
 from fixture.application import Application
 
+# Предварительно запустить локальный сервер "XAMPP Control Panel"
 fixture = None
 
 # Инициализатор фикстуры

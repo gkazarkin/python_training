@@ -7,10 +7,11 @@ from fixture.contact_methods import ContactHelper
 def test_add_contact(app):
     old_contacts = app.contact.get_contact_list()
     contact = Contact(firstname="Gleb", middlename="Alex", lastname="Kazarkin", nickname="gkazarkin", title="AccTitle",
-                      company="TestCompany", address="Yakovleva 5", home="515232", mobile="89539235812", work="367412",
-                      fax="89539234611", email="gkazarkin@test.ru", email2="gkazarkin@test.com", homepage="gkazarkin.com",
+                      company="TestCompany", address="Yakovleva 5",
+                      homephone="515232", mobilephone="89539235812", workphone="367412", fax="89539234611",
+                      email="gkazarkin@test.ru", email2="gkazarkin@test.com", homepage="gkazarkin.com",
                       bday="11", bmonth="April", byear="1987", aday="11", amonth="April", ayear="1987", address2="Yakovleva 5",
-                      phone2="515232", notes="Test Note")
+                      secondaryphone="515232", notes="Test Note")
     app.contact.add_new_contact(contact)
 
     # assert len(old_contacts) + 1 == app.contact.count_contacts()  # Hash
