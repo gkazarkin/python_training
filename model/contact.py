@@ -3,13 +3,16 @@ from sys import maxsize
 class Contact:
     def __init__(self, firstname=None, middlename=None, lastname=None, nickname=None, company=None, title=None, address=None,
                  homephone=None, mobilephone=None, workphone=None, fax=None, email=None, email2=None, homepage=None, bday=None, bmonth=None,
-                 byear=None, aday=None, amonth=None, ayear=None, address2=None, secondaryphone=None, notes=None, id=None):
+                 byear=None, aday=None, amonth=None, ayear=None, address2=None, secondaryphone=None, notes=None,
+                 all_phones_from_home_page=None, id=None):
 
         # self.firstname = firstname
         # self.lastname = lastname
         # self.homephone = homephone
         # self.mobilephone = mobilephone
         # self.workphone = workphone
+        # self.secondaryphone = secondaryphone
+        # self.all_phones_from_home_page = all_phones_from_home_page
         # self.id = id
 
         self.firstname = firstname
@@ -39,6 +42,7 @@ class Contact:
         self.secondaryphone = secondaryphone
         self.notes = notes
         self.id = id
+        self.all_phones_from_home_page = all_phones_from_home_page
 
     def __repr__(self):  # Представление объекта в консоли
         return "%s:%s:%s" % (self.id, self.firstname, self.lastname)

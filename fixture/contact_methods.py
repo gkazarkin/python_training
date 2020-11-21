@@ -27,10 +27,12 @@ class ContactHelper:
                 lastname = cells[1].text
                 # id = row.find_element_by_name("selected[]").get_attribute("value")  # У чекбоксов находим value
                 id = cells[0].find_element_by_tag_name("input").get_attribute("value")
-                all_phones = cells[5].text.splitlines()  # Делим все телефоны на строки в список
+                # all_phones = cells[5].text.splitlines()  # Делим все телефоны на строки в список
                 # print("contact's phones from main page = " + str(all_phones))  # = ['515232', '89539235812', '367412', '515232']
-                self.contact_cache.append(Contact(id=id, firstname=firstname, lastname=lastname, homephone=all_phones[0],
-                                                  mobilephone=all_phones[1], workphone=all_phones[2], secondaryphone=all_phones[3]))
+                # self.contact_cache.append(Contact(id=id, firstname=firstname, lastname=lastname, homephone=all_phones[0],
+                #                                   mobilephone=all_phones[1], workphone=all_phones[2], secondaryphone=all_phones[3]))
+                all_phones = cells[5].text
+                self.contact_cache.append(Contact(id=id, firstname=firstname, lastname=lastname, all_phones_from_home_page=all_phones))
         return list(self.contact_cache)
 
     def add_new_contact(self, data):
