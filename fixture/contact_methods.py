@@ -17,6 +17,7 @@ class ContactHelper:
     def modify_contact_by_index(self, index, data):
         wd = self.app.wd
         find_contacts = wd.find_elements_by_name("entry")
+        # click_edit = find_contacts[index].find_element_by_xpath("./td[8]/a/img").click()
         cells = find_contacts[index].find_elements_by_tag_name("td")
         click_edit = cells[7].find_element_by_css_selector("a").click()
 
