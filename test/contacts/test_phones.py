@@ -29,7 +29,7 @@ def merge_phones_like_on_home_page(contact):
         filter(lambda x: x != "",  # Отфильтровываем пустые строки
                             map(lambda x: clear(x),  # Удаляет все лишние символы
                                 filter(lambda x: x is not None,  # Отфильтровываются все пусты (None)
-                                       [contact.homephone, contact.workphone, contact.mobilephone, contact.secondaryphone]))))  # Исходный список из 4 элементов
+                                       [contact.homephone, contact.mobilephone, contact.workphone, contact.secondaryphone]))))  # Исходный список из 4 элементов
 
 def clear(s):
     # Отсекаем лишние знаки (скобки, -, пробел и т.д.), "+" не отчищаем потому что он виден на главной странице

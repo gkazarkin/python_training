@@ -53,7 +53,7 @@ class ContactHelper:
 
     def modify_contact_by_index(self, index, data):
         wd = self.app.wd
-        self.open_contact_page_and_click_edit_contact(index)
+        self.open_contact_to_edit_by_index(index)
 
         self.fill_contact_form(data)
         click_update = wd.find_element_by_name("update").click()
