@@ -5,21 +5,42 @@ class ContactHelper:
     def __init__(self, app):
         self.app = app
 
+    def change_field_value(self, field_name, text):
+        wd = self.app.wd
+        if text is not None:
+            wd.find_element_by_name(field_name).click()
+            wd.find_element_by_name(field_name).clear()
+            wd.find_element_by_name(field_name).send_keys(text)
+
+    contact_cache = None  # Кеширование списка контактов, сбрасывается после добавления\удаления\модификации
+
+    def get_contact_list(self):
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.open_home_page()
+            self.contact_cache = []
+            find_contacts = wd.find_elements_by_name("entry")
+            for row in find_contacts:
+                cells = row.find_elements_by_tag_name("td")
+                firstname = cells[2].text
+                lastname = cells[1].text
+                # id = row.find_element_by_name("selected[]").get_attribute("value")  # У чекбоксов находим value
+                id = cells[0].find_element_by_tag_name("input").get_attribute("value")
+                self.contact_cache.append(Contact(id=id, firstname=firstname, lastname=lastname))
+        return list(self.contact_cache)
+
     def add_new_contact(self, data):
         wd = self.app.wd
         self.click_add_new_contact()
         self.fill_contact_form(data)
         click_enter = wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
 
-        self.open_contacts_page()
+        self.open_home_page()
         self.contact_cache = None
 
-    def modify_contact_by_index(self, index, data):
+    def open_contact_to_edit_by_index(self, index, data):
         wd = self.app.wd
-        find_contacts = wd.find_elements_by_name("entry")
-        # click_edit = find_contacts[index].find_element_by_xpath("./td[8]/a/img").click()
-        cells = find_contacts[index].find_elements_by_tag_name("td")
-        click_edit = cells[7].find_element_by_css_selector("a").click()
+        self.open_contact_page_and_click_edit_contact(index)
 
         self.fill_contact_form(data)
         click_update = wd.find_element_by_name("update").click()
@@ -27,8 +48,38 @@ class ContactHelper:
         click_home = wd.find_element_by_link_text("home page").click()
         self.contact_cache = None
 
+    def open_contact_page_and_click_edit_contact(self, index):
+        wd = self.app.wd
+        self.app.open_home_page()
+        row = wd.find_elements_by_name("entry")[index]
+        cell_to_edit = row.find_elements_by_tag_name("td")[7]
+        click_edit = cell_to_edit.find_element_by_tag_name("a").click()
+
+    # def open_contact_to_edit_by_index(self, index, data):
+    #     wd = self.app.wd
+    #     find_contacts = wd.find_elements_by_name("entry")
+    #     # click_edit = find_contacts[index].find_element_by_xpath("./td[8]/a/img").click()
+    #     cells = find_contacts[index].find_elements_by_tag_name("td")
+    #     click_edit = cells[7].find_element_by_css_selector("a").click()
+    #
+    #     self.fill_contact_form(data)
+    #     click_update = wd.find_element_by_name("update").click()
+    #
+    #     click_home = wd.find_element_by_link_text("home page").click()
+    #     self.contact_cache = None
+
+    def open_contact_view_by_index(self, index):
+        wd = self.app.wd
+        self.app.open_home_page()
+        row = wd.find_elements_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[6]
+        click_view = cell.find_element_by_tag_name("a").click()
+
+
+
+
     def modify_first_contact(self, data):
-        self.modify_contact_by_index(0, data)
+        self.open_contact_to_edit_by_index(0, data)
 
     def delete_contact_by_index(self, index):
         wd = self.app.wd
@@ -37,7 +88,7 @@ class ContactHelper:
         # wd.switch_to_alert().accept()
         close_alert = wd.switch_to.alert.accept()
 
-        self.open_contacts_page()
+        self.open_home_page()
         self.contact_cache = None
 
     def delete_first_contact(self):
@@ -90,14 +141,7 @@ class ContactHelper:
             wd.find_element_by_name(field_name).click()
             Select(wd.find_element_by_name(field_name)).select_by_visible_text(date)
 
-    def change_field_value(self, field_name, text):
-        wd = self.app.wd
-        if text is not None:
-            wd.find_element_by_name(field_name).click()
-            wd.find_element_by_name(field_name).clear()
-            wd.find_element_by_name(field_name).send_keys(text)
-
-    def open_contacts_page(self):
+    def open_home_page(self):
         wd = self.app.wd
         # Проверяем находимся ли мы уже на странице контактов и если нет, то переходим
         if not (wd.current_url.endswith("addressbook/") and len(wd.find_elements_by_name("add")) > 0):
@@ -105,24 +149,12 @@ class ContactHelper:
 
     def count_contacts(self):
         wd = self.app.wd
-        self.open_contacts_page()
+        self.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
-    contact_cache = None  # Кеширование списка контактов, сбрасывается после добавления\удаления\модификации
 
-    def get_contact_list(self):
-        if self.contact_cache is None:
-            wd = self.app.wd
-            self.open_contacts_page()
-            find_contacts = wd.find_elements_by_name("entry")
-            self.contact_cache = []
-            for element in find_contacts:
-                cells = element.find_elements_by_tag_name("td")
-                firstname = cells[2].text
-                lastname = cells[1].text
-                id = element.find_element_by_name("selected[]").get_attribute("value")  # У чекбоксов находим value
-                self.contact_cache.append(Contact(id=id, firstname=firstname, lastname=lastname))
-        return list(self.contact_cache)
+
+
 
 
 

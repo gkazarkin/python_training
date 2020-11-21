@@ -5,6 +5,13 @@ class Contact:
                  home=None, mobile=None, work=None, fax=None, email=None, email2=None, homepage=None, bday=None, bmonth=None,
                  byear=None, aday=None, amonth=None, ayear=None, address2=None, phone2=None, notes=None, id=None):
 
+        # self.firstname = firstname
+        # self.lastname = lastname
+        # self.homephone = homephone
+        # self.mobilephone = mobilephone
+        # self.workphone = workphone
+        # self.id = id
+
         self.firstname = firstname
         self.middlename = middlename
         self.lastname = lastname

@@ -20,7 +20,7 @@ def test_modify_first_contact(app):
     contact = Contact(firstname="Modif_firstname", lastname="Modif_lastname")
     contact.id = old_contacts[index].id  # Запоминаем id
 
-    app.contact.modify_contact_by_index(index, contact)
+    app.contact.open_contact_to_edit_by_index(index, contact)
 
     # assert len(old_contacts) == app.contact.count_contacts()  #Hash
     # new_contacts = app.contact.get_contact_list()
