@@ -2,18 +2,9 @@ from sys import maxsize
 
 class Contact:
     def __init__(self, firstname=None, middlename=None, lastname=None, nickname=None, company=None, title=None, address=None,
-                 homephone=None, mobilephone=None, workphone=None, fax=None, email=None, email2=None, homepage=None, bday=None, bmonth=None,
+                 homephone=None, mobilephone=None, workphone=None, fax=None, email=None, email2=None, email3=None, homepage=None, bday=None, bmonth=None,
                  byear=None, aday=None, amonth=None, ayear=None, address2=None, secondaryphone=None, notes=None,
-                 all_phones_from_home_page=None, id=None):
-
-        # self.firstname = firstname
-        # self.lastname = lastname
-        # self.homephone = homephone
-        # self.mobilephone = mobilephone
-        # self.workphone = workphone
-        # self.secondaryphone = secondaryphone
-        # self.all_phones_from_home_page = all_phones_from_home_page
-        # self.id = id
+                 all_emails_from_home_page=None, all_phones_from_home_page=None, id=None):
 
         self.firstname = firstname
         self.middlename = middlename
@@ -30,6 +21,8 @@ class Contact:
 
         self.email = email
         self.email2 = email2
+        self.email3 = email3
+
         self.homepage = homepage
         self.bday = bday
         self.byear = byear
@@ -42,6 +35,7 @@ class Contact:
         self.secondaryphone = secondaryphone
         self.notes = notes
         self.id = id
+        self.all_emails_from_home_page = all_emails_from_home_page
         self.all_phones_from_home_page = all_phones_from_home_page
 
     def __repr__(self):  # Представление объекта в консоли
