@@ -10,13 +10,22 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 
 class Application:
-    def __init__(self):
-        self.wd = webdriver.Chrome("C:\\Windows\\SysWOW64\\chromedriver86.exe")
-        # self.wd = WebDriver()
+    def __init__(self, browser, base_url):
+        if browser == "chrome":
+            self.wd = webdriver.Chrome("C:\\Windows\\SysWOW64\\chromedriver86.exe")
+        elif browser == "firefox":
+            self.wd = webdriver.Firefox("C:\\Windows\\SysWOW64\\chromedriver86.exe")
+        elif browser == "opera":
+            self.wd = webdriver.Opera("C:\\Windows\\SysWOW64\\chromedriver86.exe")
+        elif browser == "ie":
+            self.wd = webdriver.Ie("C:\\Windows\\SysWOW64\\chromedriver86.exe")
+        else:
+            raise ValueError("Unrecognized browser %s" % browser)  # Исключение
         self.wd.implicitly_wait(2)
         self.session = SessionHelper(self)
         self.group = GroupHelper(self)
         self.contact = ContactHelper(self)
+        self.base_url = base_url
 
     def is_valid(self):
         try:
@@ -27,7 +36,7 @@ class Application:
 
     def open_home_page(self):
         wd = self.wd
-        get_main_page = wd.get("http://localhost/addressbook/")
+        get_main_page = wd.get(self.base_url)
 
     def destroy(self):
         self.wd.quit()

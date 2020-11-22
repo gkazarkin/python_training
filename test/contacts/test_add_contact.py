@@ -24,8 +24,7 @@ def random_email(maxlen):
            ("".join([random.choice(gen_email) for i in range(random.randrange(maxlen))])) + ".ru"
 
 
-testdata = [Contact(firstname="", middlename="", lastname="", nickname="", title="", company="", address="", homephone="", mobilephone="",
-                    workphone="", fax="", email="", email2="", email3="", homepage="", address2="", secondaryphone="", notes="")] + [
+testdata = [
         Contact(firstname=random_string("F", 10), middlename=random_string("Jr. ", 10), lastname=random_string("L", 10),
                 nickname=random_symbols("Nick", 10), title=random_symbols("Title", 10), company=random_symbols("Company", 10),
                 address=random_symbols("Moscow ", 10), homephone=random_digits(6), mobilephone=random_digits(11),
