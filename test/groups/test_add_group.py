@@ -15,7 +15,7 @@ def random_string(prefix, maxlen):
 testdata = [Group(name="", header="", footer="")] + [  # Список
         # Генерит с префиксом (name) + не более 10 символов
         Group(name=random_string("name", 10), header=random_string("header", 10), footer=random_string("footer", 10))
-        for name in range(5)  # list comprehension, цикл 5 раз
+        for name in range(3)  # list comprehension, цикл 5 раз
 
         # Group(name=name, header=header, footer=footer)
         # for name in ["", random_string("name", 10)]  # list comprehension, пробегает по 2 возможным значениям
