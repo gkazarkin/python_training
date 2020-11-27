@@ -13,7 +13,8 @@ def test_modify_first_contact(app):
                     byear="1987", aday="11", amonth="April", ayear="1987", address2="Yakovleva 5", secondaryphone="515232", notes="Test Note"))
 
     old_contacts = app.contact.get_contact_list()
-    index = randrange(len(old_contacts))  # Генерируем случайный индекс от 0 до количества контактов
+    '''Генерируем случайный индекс от 0 до количества контактов'''
+    index = randrange(len(old_contacts))
     print(index)
     contact = Contact(firstname="Modif_firstname", lastname="Modif_lastname")
     contact.id = old_contacts[index].id  # Запоминаем id

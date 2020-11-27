@@ -7,10 +7,11 @@ def test_delete_some_group(app):
     if app.group.count_groups() == 0:
         app.group.create(Group(name="test"))
     old_groups = app.group.get_group_list()
-
-    index = randrange(len(old_groups))  # Генерируем случайное число от 0 до количества групп
+    '''Генерируем случайное число от 0 до количества групп'''
+    index = randrange(len(old_groups))
     app.group.delete_group_by_index(index)
-    assert len(old_groups) - 1 == app.group.count_groups()  # Выступает в роли хеширования количества групп
+    '''Выступает в роли хеширования количества групп'''
+    assert len(old_groups) - 1 == app.group.count_groups()
     new_groups = app.group.get_group_list()
 
     old_groups[index:index+1] = []

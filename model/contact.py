@@ -38,15 +38,18 @@ class Contact:
         self.all_emails_from_home_page = all_emails_from_home_page
         self.all_phones_from_home_page = all_phones_from_home_page
 
-    def __repr__(self):  # Представление объекта в консоли
+    """Представление объекта в консоли"""
+    def __repr__(self):
         return "%s:%s:%s" % (self.id, self.firstname, self.lastname)
 
-    def __eq__(self, other):  # Логическое сравнение, вместо сравнения объектов в памяти
-        return (self.id is None or other.id is None or self.id == other.id) and self.firstname == other.firstname and \
-               self.lastname == other.lastname  # 2 контакта равны, если совпадают имена
+    """Логическое сравнение, вместо сравнения объектов в памяти"""
+    def __eq__(self, other):
+        """2 контакта равны, если совпадают имена"""
+        return (self.id is None or other.id is None or self.id == other.id) and self.firstname == other.firstname and self.lastname == other.lastname
 
     def id_or_max(self):
         if self.id:
             return int(self.id)
         else:
-            return maxsize  # максимальное число, которое может использоваться в индексах списков
+            """максимальное число, которое может использоваться в индексах списков"""
+            return maxsize

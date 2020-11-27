@@ -13,7 +13,8 @@ class ContactHelper:
             wd.find_element_by_name(field_name).clear()
             wd.find_element_by_name(field_name).send_keys(text)
 
-    contact_cache = None  # Кеширование списка контактов, сбрасывается после добавления\удаления\модификации
+    """Кеширование списка контактов, сбрасывается после добавления или удаления или модификации"""
+    contact_cache = None
 
     def get_contact_list(self):
         if self.contact_cache is None:
@@ -27,9 +28,13 @@ class ContactHelper:
                 lastname = cells[1].text
                 address = cells[3].text
                 all_emails = cells[4].text
-                # id = row.find_element_by_name("selected[]").get_attribute("value")  # У чекбоксов находим value
+
+                """У чекбоксов находим value"""
+                # id = row.find_element_by_name("selected[]").get_attribute("value")
                 id = cells[0].find_element_by_tag_name("input").get_attribute("value")
-                # all_phones = cells[5].text.splitlines()  # Делим все телефоны на строки в список
+
+                """Делим все телефоны на строки в список"""
+                # all_phones = cells[5].text.splitlines()
                 # print("contact's phones from main page = " + str(all_phones))  # = ['515232', '89539235812', '367412', '515232']
                 # self.contact_cache.append(Contact(id=id, firstname=firstname, lastname=lastname, homephone=all_phones[0],
                 #                                   mobilephone=all_phones[1], workphone=all_phones[2], secondaryphone=all_phones[3]))
@@ -64,19 +69,6 @@ class ContactHelper:
         click_home = wd.find_element_by_link_text("home page").click()
         self.contact_cache = None
 
-    # def open_contact_to_edit_by_index(self, index, data):
-    #     wd = self.app.wd
-    #     find_contacts = wd.find_elements_by_name("entry")
-    #     # click_edit = find_contacts[index].find_element_by_xpath("./td[8]/a/img").click()
-    #     cells = find_contacts[index].find_elements_by_tag_name("td")
-    #     click_edit = cells[7].find_element_by_css_selector("a").click()
-    #
-    #     self.fill_contact_form(data)
-    #     click_update = wd.find_element_by_name("update").click()
-    #
-    #     click_home = wd.find_element_by_link_text("home page").click()
-    #     self.contact_cache = None
-
     def open_contact_view_by_index(self, index):
         wd = self.app.wd
         self.open_home_page()
@@ -99,19 +91,27 @@ class ContactHelper:
         email = wd.find_element_by_name("email").get_attribute("value")
         email2 = wd.find_element_by_name("email2").get_attribute("value")
         email3 = wd.find_element_by_name("email3").get_attribute("value")
+
+        """Строим объект, 1 = название параметра, 2 = название локальной переменной"""
         return Contact(firstname=firstname, lastname=lastname, id=id, address=address, homephone=homephone, workphone=workphone, mobilephone=mobilephone,
-                       secondaryphone=secondaryphone, email=email, email2=email2, email3=email3)  # Строим объект, 1 = название параметра, 2 = название локальной переменной
+                       secondaryphone=secondaryphone, email=email, email2=email2, email3=email3)
 
     def get_contact_from_view_page(self, index):
         wd = self.app.wd
         self.open_contact_view_by_index(index)
-        text = wd.find_element_by_id("content").text  # Тут телефоны не идут отдельно, а идут скопом со всеми данными контакта
-        homephone = re.search("H: (.*)", text).group(1)  # Ищем строку, начинающуюся с H: и берём значение до переноса строки
+
+        """Тут телефоны не идут отдельно, а идут скопом со всеми данными контакта"""
+        text = wd.find_element_by_id("content").text
+
+        """Ищем строку, начинающуюся с H: и берём значение до переноса строки"""
+        homephone = re.search("H: (.*)", text).group(1)
         workphone = re.search("W: (.*)", text).group(1)
         mobilephone = re.search("M: (.*)", text).group(1)
         secondaryphone = re.search("P: (.*)", text).group(1)
+
+        """Строим объект, 1 = название параметра, 2 = название локальной переменной"""
         return Contact(homephone=homephone, workphone=workphone,
-                       mobilephone=mobilephone, secondaryphone=secondaryphone)  # Строим объект, 1 = название параметра, 2 = название локальной переменной
+                       mobilephone=mobilephone, secondaryphone=secondaryphone)
 
     def modify_first_contact(self, data):
         self.modify_contact_by_index(0, data)
@@ -180,7 +180,8 @@ class ContactHelper:
 
     def open_home_page(self):
         wd = self.app.wd
-        # Проверяем находимся ли мы уже на странице контактов и если нет, то переходим
+
+        """Проверяем находимся ли мы уже на странице контактов и если нет, то переходим"""
         if not (wd.current_url.endswith("addressbook/") and len(wd.find_elements_by_name("add")) > 0):
             click_home = wd.find_element_by_link_text("home").click()
 

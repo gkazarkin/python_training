@@ -20,7 +20,8 @@ class Application:
         elif browser == "ie":
             self.wd = webdriver.Ie("C:\\IEDriverServer.exe")
         else:
-            raise ValueError("Unrecognized browser %s" % browser)  # Исключение
+            """Исключение"""
+            raise ValueError("Unrecognized browser %s" % browser)
         self.wd.implicitly_wait(2)
         self.session = SessionHelper(self)
         self.group = GroupHelper(self)
@@ -41,6 +42,7 @@ class Application:
     def destroy(self):
         self.wd.quit()
 
+    """Декоратор скриншота при падении"""
     # def decorator_screenshot(func):
     #     def wrapper(*args, **kwargs):
     #         try:
@@ -54,4 +56,3 @@ class Application:
     # @decorator_screenshot
     # def test_something(self):
     #     Assert.fail("failed test")
-    #

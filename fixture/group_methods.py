@@ -6,7 +6,8 @@ class GroupHelper:
 
     def open_groups_page(self):
         wd = self.app.wd
-        # Проверяем находимся ли мы уже на странице групп и если нет, то переходим
+
+        """Проверяем находимся ли мы уже на странице групп и если нет, то переходим"""
         if not (wd.current_url.endswith("/group.php") and len(wd.find_elements_by_name("new")) > 0):
             wd.find_element_by_link_text("groups").click()
 
@@ -14,12 +15,12 @@ class GroupHelper:
         wd = self.app.wd
         self.open_groups_page()
 
-        # init groups page
+        """init groups page"""
         click_new = wd.find_element_by_name("new").click()
 
         self.fill_group_form(group)
 
-        # submit group creation
+        """submit group creation"""
         click_submit = wd.find_element_by_name("submit").click()
 
         self.return_to_groups_page()
@@ -31,13 +32,13 @@ class GroupHelper:
 
         self.select_group_by_index(index)
 
-        # open modification form
+        """open modification form"""
         click_edit = wd.find_element_by_name("edit").click()
 
-        # fill group form
+        """fill group form"""
         self.fill_group_form(group)
 
-        # submit modification
+        """submit modification"""
         click_update = wd.find_element_by_name("update").click()
 
         self.return_to_groups_page()
@@ -52,7 +53,7 @@ class GroupHelper:
 
         self.select_group_by_index(index)
 
-        # submit deletion
+        """submit deletion"""
         click_delete = wd.find_element_by_name("delete").click()
 
         self.return_to_groups_page()
@@ -90,17 +91,22 @@ class GroupHelper:
         wd = self.app.wd
         click_groups = wd.find_element_by_link_text("group page").click()
 
-    group_cache = None  # Кеширование списка групп, сбрасывается после добавления\удаления\модификации
+    """Кеширование списка групп, сбрасывается после добавления или удаления или модификации"""
+    group_cache = None
 
     def get_group_list(self):
         if self.group_cache is None:
             wd = self.app.wd
             self.open_groups_page()
-            wd.find_elements_by_css_selector("span.group")  # В консоли $$('span.group') -> найти элементы
+
+            """ В консоли $$('span.group') -> найти элементы """
+            wd.find_elements_by_css_selector("span.group")
             self.group_cache = []
             for element in wd.find_elements_by_css_selector("span.group"):
                 text = element.text
-                id = element.find_element_by_name("selected[]").get_attribute("value")  # У чекбокса находим value
+
+                """У чекбокса находим value"""
+                id = element.find_element_by_name("selected[]").get_attribute("value")
                 self.group_cache.append(Group(name=text, id=id))
         return list(self.group_cache)
 

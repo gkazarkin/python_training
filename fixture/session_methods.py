@@ -6,7 +6,7 @@ class SessionHelper:
 
     def login(self, username, password):
         wd = self.app.wd
-        # open main url page
+        """open main url page"""
         wd.get("http://localhost/addressbook/")
 
         wd.find_element_by_name("user").click()
@@ -29,19 +29,25 @@ class SessionHelper:
 
     def is_logged_in_as(self, username):
         wd = self.app.wd
-        return self.get_logged_user() == username  # Сверяем непосредственно имя пользователя
+
+        """Сверяем непосредственно имя пользователя"""
+        return self.get_logged_user() == username
 
     def get_logged_user(self):
         wd = self.app.wd
-        # return wd.find_element_by_xpath("//div/div[1]/form/b").text == "(%s)" % username  # %s = Форматирование
-        return wd.find_element_by_xpath("//div/div[1]/form/b").text[1:-1]  # Обрезаем тест, убирая 1 и последний символы (скобочки)
+
+        """%s = Форматирование"""
+        # return wd.find_element_by_xpath("//div/div[1]/form/b").text == "(%s)" % username
+
+        """Обрезаем тест, убирая 1 и последний символы (скобочки)"""
+        return wd.find_element_by_xpath("//div/div[1]/form/b").text[1:-1]
 
     def ensure_logout(self):
         wd = self.app.wd
         if self.is_logged_in():
             self.logout()
 
-        # Проверка залогинен ли уже
+    """Проверка залогинен ли уже"""
     def ensure_login(self, username, password):
         wd = self.app.wd
         if self.is_logged_in():

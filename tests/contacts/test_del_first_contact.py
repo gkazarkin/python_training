@@ -13,13 +13,15 @@ def test_delete_first_contact(app):
                     amonth="April", ayear="1987", address2="Yakovleva 5", secondaryphone="515232", notes="Test Note"))
 
     old_contacts = app.contact.get_contact_list()
-    index = randrange(len(old_contacts))  # Генерируем случайный индекс от 0 до количества контактов
+    '''Генерируем случайный индекс от 0 до количества контактов'''
+    index = randrange(len(old_contacts))
     app.contact.delete_contact_by_index(index)
 
     # assert len(old_contacts) - 1 == app.contact.count_contacts()  # Hash
     # new_contacts = app.contact.get_contact_list()
     new_contacts = app.contact.get_contact_list()
-    assert len(old_contacts) - 1 == app.contact.count_contacts()  # Сравнение размеров списков
+    '''Сравнение размеров списков'''
+    assert len(old_contacts) - 1 == app.contact.count_contacts()
 
     old_contacts[index:index+1] = []
     assert old_contacts == new_contacts

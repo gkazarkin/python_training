@@ -12,25 +12,35 @@ print(cur)
 
 '''Получить список файлов в директории'''
 # os.listdir("c:\\Python34")
-cur2 = os.listdir(".")  # Текущая директория
+'''Текущая директория'''
+cur2 = os.listdir(".")
 print(cur2)
-# os.listdir("Scripts")  # Файлы в папке из текущей директории
+'''Файлы в папке из текущей директории'''
+# os.listdir("Scripts")
 
 '''Path'''
-os.path.isfile("files.py")  # Это файл? = True
-os.path.isdir("Scripts")  # Это папка?
-# Фильтруем, оставляя только файлы
+'''Это файл? = True'''
+os.path.isfile("files.py")
+'''Это папка?'''
+os.path.isdir("Scripts")
+'''Фильтруем, оставляя только файлы'''
 spisok_failov = list(filter(lambda f: os.path.isfile(f), os.listdir(".")))
 print(spisok_failov)
 
-'''Создание, удаление, копирование'''
-# os.mkdir("test")  # Создаётся пустая папка в текущей
-# os.makedirs("test1\\test2\\test3")  # Создаются пустые вложенные папки
-# os.rmdir("test")  # Удаляет указанную папку
-# os.remove("c:\\Python34\\README.txt")  # удаляет файл
+'''Создание, удаление, копирование
+Создаётся пустая папка в текущей'''
+# os.mkdir("test")
+'''Создаются пустые вложенные папки'''
+# os.makedirs("test1\\test2\\test3")
+'''Удаляет указанную папку'''
+# os.rmdir("test")
+'''удаляет файл'''
+# os.remove("c:\\Python34\\README.txt")
 
-# shutil.rmtree("test1")  # Удаляет папку вместе с её содержимым (и вложенными папками)
-# shutil.copy("c:/Python34/README.txt", "c:/temp/py")  # копировать что и куда
+'''Удаляет папку вместе с её содержимым (и вложенными папками)'''
+# shutil.rmtree("test1")
+'''копировать что и куда'''
+# shutil.copy("c:/Python34/README.txt", "c:/temp/py")
 
 '''Чтение, запись файла'''
 f1 = open("lists.py")
@@ -38,27 +48,33 @@ text = f1.read()
 print(text)
 f1.close()
 
-# f2 = open("c:/Python34/README.txt", "w")  # требуем записать в файл
+'''требуем записать в файл'''
+# f2 = open("c:/Python34/README.txt", "w")
 # f2.write(text)
-# f2.close()  # Окончательная запись в файл происходит во время закрытия файла
+'''Окончательная запись в файл происходит во время закрытия файла'''
+# f2.close()
 
 '''JSON + try'''
 f = open("config.json")
 try:
     res = json.load(f)
-except ValueError as ex:  # Перехват ошибки
+except ValueError as ex:
+    '''Перехват ошибки'''
     print(ex)
     res = {}
-finally:  # выполнится в любом случае
+finally:
+    '''выполнится в любом случае'''
     f.close()
 
-print(res)  # Возвращает словарь
+''' "Возвращает" словарь '''
+print(res)
 print(res["browser"]["type"])
 
-with open("config.json") as f3:  # Файл будет использоваться только в рамках блока и закроется сам
+'''Файл будет использоваться только в рамках блока и закроется сам'''
+with open("config.json") as f3:
     try:
         res2 = json.load(f3)
-    except ValueError as ex:  # Перехват ошибки
+    except ValueError as ex:
         print(ex)
         res2 = {}
 
