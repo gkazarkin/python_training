@@ -42,12 +42,23 @@ f1.close()
 # f2.write(text)
 # f2.close()  # Окончательная запись в файл происходит во время закрытия файла
 
-'''JSON'''
+'''JSON + try'''
 f = open("config.json")
-res = json.load(f)
+try:
+    res = json.load(f)
+except ValueError as ex:  # Перехват ошибки
+    print(ex)
+    res = {}
+finally:  # выполнится в любом случае
+    f.close()
+
 print(res)  # Возвращает словарь
 print(res["browser"]["type"])
-f.close()
 
-
+with open("config.json") as f3:  # Файл будет использоваться только в рамках блока и закроется сам
+    try:
+        res2 = json.load(f3)
+    except ValueError as ex:  # Перехват ошибки
+        print(ex)
+        res2 = {}
 

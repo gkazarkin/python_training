@@ -12,13 +12,13 @@ from selenium.common.exceptions import NoAlertPresentException
 class Application:
     def __init__(self, browser, base_url):
         if browser == "chrome":
-            self.wd = webdriver.Chrome("C:\\Windows\\SysWOW64\\chromedriver86.exe")
+            self.wd = webdriver.Chrome("C:\\chromedriver.exe")
         elif browser == "firefox":
-            self.wd = webdriver.Firefox("C:\\Windows\\System32\\geckodriver.exe")
+            self.wd = webdriver.Firefox("C:\\geckodriver.exe")
         elif browser == "opera":
-            self.wd = webdriver.Opera("C:\\Windows\\System32\\operadriver.exe")
+            self.wd = webdriver.Opera("C:\\operadriver.exe")
         elif browser == "ie":
-            self.wd = webdriver.Ie("C:\\Windows\\System32\\IEDriverServer.exe")
+            self.wd = webdriver.Ie("C:\\IEDriverServer.exe")
         else:
             raise ValueError("Unrecognized browser %s" % browser)  # Исключение
         self.wd.implicitly_wait(2)
