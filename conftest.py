@@ -1,5 +1,6 @@
 import pytest
 from fixture.application import Application
+import datetime
 
 # Предварительно запустить локальный сервер "XAMPP Control Panel"
 fixture = None
@@ -30,3 +31,6 @@ def stop(request):
 def pytest_addoption(parser):  # Передаётся парсер командной строки
     parser.addoption("--browser", action="store", default="chrome")  # Доступ передаётся через объект request
     parser.addoption("--baseUrl", action="store", default="http://localhost/addressbook/")  # Доступ передаётся через объект request
+
+
+

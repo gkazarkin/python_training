@@ -40,3 +40,18 @@ class Application:
 
     def destroy(self):
         self.wd.quit()
+
+    # def decorator_screenshot(func):
+    #     def wrapper(*args, **kwargs):
+    #         try:
+    #            func(*args, **kwargs)
+    #         except AssertionError:
+    #             file_name = f'{datetime.today().strftime("%Y-%m-%d_%H:%M")}.png'.replace("/", "_").replace("::", "__")
+    #             driver.save_screenshot(file_name)
+    #             raise
+    #     return wrapper
+    #
+    # @decorator_screenshot
+    # def test_something(self):
+    #     Assert.fail("failed test")
+    #
