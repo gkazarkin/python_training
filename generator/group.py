@@ -5,7 +5,7 @@ from model.group import Group
 import random
 import string
 import os.path
-import json
+import jsonpickle
 import getopt
 import sys
 
@@ -30,7 +30,7 @@ for o, a in opts:
 """Генератор групп"""
 def random_string(prefix, maxlen):
     # symbols = string.ascii_letters + string.digits + string.punctuation + " "*10
-    symbols = string.ascii_letters + string.digits + " "*10  # Генерируем символы
+    symbols = string.ascii_letters + string.digits + " "*5  # Генерируем символы
 
     '''Выбирает символы и склеивает этот список без пробелов через join в строку'''
     return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
@@ -48,6 +48,9 @@ testdata = [
 file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", f)
 
 """Открывает файл с записью данных.
-Сначала объект превращаем в словарь, потом через dumps в строку в формате json"""
+json- Сначала объект превращаем в словарь, потом через dumps в строку в формате json
+jsonpickle- сериализация объект Group"""
 with open(file, "w") as out:
-    out.write(json.dumps(testdata, default=lambda x: x.__dict__, indent=2))
+    jsonpickle.set_encoder_options("json", indent=2)
+    out.write(jsonpickle.encode(testdata))  # Через jsonpickle
+    # out.write(json.dumps(testdata, default=lambda x: x.__dict__, indent=2))  # Через json
