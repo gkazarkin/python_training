@@ -30,7 +30,7 @@ for o, a in opts:
 """Генератор групп"""
 def random_string(prefix, maxlen):
     # symbols = string.ascii_letters + string.digits + string.punctuation + " "*10
-    symbols = string.ascii_letters + string.digits + " "*5  # Генерируем символы
+    symbols = string.ascii_letters + string.digits  # Генерируем символы
 
     '''Выбирает символы и склеивает этот список без пробелов через join в строку'''
     return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
