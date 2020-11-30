@@ -6,7 +6,7 @@ import string
 
 def random_string(maxlen):
     """Генерируем символы"""
-    gen_string = string.ascii_letters + " "
+    gen_string = string.ascii_letters
 
     """Выбирает символы и склеивает этот список без пробелов через join в строку"""
     return "".join([random.choice(gen_string) for i in range(random.randrange(maxlen))])
@@ -17,7 +17,7 @@ def random_digits(maxlen):
 
 # def random_symbols(prefix, maxlen):
 def random_symbols(maxlen):
-    gen_symbols = string.ascii_letters + str(string.digits) + " "
+    gen_symbols = string.ascii_letters + str(string.digits)
     # return prefix + "".join([random.choice(gen_symbols) for i in range(random.randrange(maxlen))])
     return "".join([random.choice(gen_symbols) for i in range(random.randrange(maxlen))])
 
