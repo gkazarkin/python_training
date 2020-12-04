@@ -5,28 +5,46 @@ import json
 import os.path
 import importlib
 import jsonpickle
+from fixture.db import DbFixture
 
 '''Предварительно запустить локальный сервер "XAMPP Control Panel" '''
 fixture = None
 target = None
 
-'''Инициализатор фикстуры'''
-@pytest.fixture
-def app(request):
-    global fixture
+"""Вспомогательная функция, занимается загрузкой"""
+def load_config(file):
     global target
-    browser = request.config.getoption("--browser")
     if target is None:
-        '''Выясняем абсолютный путь до проекта и подклеиваем к нему нужный путь до файла'''
-        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), request.config.getoption("--target"))
+        '''Загрузка конфигурации с кешированием'''
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), file)
         '''Здесь может падать, так как ищет target.json в другой папке, для этого надо указать папку проекта в Edit Configuration, Working directory
         Или надо запускать из консоли из папки проекта, а не тестов'''
         with open(config_file) as f:
             target = json.load(f)
+    return target
+
+
+"""Инициализатор фикстуры"""
+@pytest.fixture
+def app(request):
+    global fixture
+    browser = request.config.getoption("--browser")
+    web_config = load_config(request.config.getoption("--target"))['web']
     if fixture is None or not fixture.is_valid():
-        fixture = Application(browser=browser, base_url=target["baseUrl"])
-    fixture.session.ensure_login(username=target["username"], password=target["password"])
+        fixture = Application(browser=browser, base_url=web_config["baseUrl"])
+    fixture.session.ensure_login(username=web_config["username"], password=web_config["password"])
     return fixture
+
+
+"""Фикстура для работы с базой данных MySQL"""
+@pytest.fixture(scope="session")
+def db(request):
+    db_config = load_config(request.config.getoption("--target"))['db']
+    dbfixture = DbFixture(host=db_config['host'], name=db_config['name'], user=db_config['user'], password=db_config['password'])
+    def fin():
+        dbfixture.destroy()
+    request.addfinalizer(fin)
+    return dbfixture
 
 
 '''Фикстура остановки'''
