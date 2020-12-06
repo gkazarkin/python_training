@@ -4,6 +4,13 @@ activate
 
 chromedriver = C:\Windows\SysWOW64\chromedriver86.exe
 
+# imports for env
+pip install pony
+pip install jsonpickle
+pip install importlib
+pip install json
+pip install pymysql
+
 # Tests in cmd
 cd <path to tests>
 py.test --browser=chrome test_delete_group.py
