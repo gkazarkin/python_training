@@ -1,12 +1,15 @@
 from model.group import Group
+from timeit import timeit
 
 def test_group_list(app, db):
+    # time_ui_list = print(timeit(lambda: app.group.get_group_list(), number=1))
     ui_list = app.group.get_group_list()
 
     """Удаляем лишние пробелы при сравнении из базы данных, так как на фронте они обрезаются"""
     def clean(group):
         return Group(id=group.id, name=group.name.strip())
 
+    # time_db_list = print(timeit(lambda : map(clean, db.get_group_list()), number=1))
     db_list = map(clean, db.get_group_list())
     """Сортируем по id"""
     assert sorted(ui_list, key=Group.id_or_max) == sorted(db_list, key=Group.id_or_max)
