@@ -57,13 +57,18 @@ def stop(request):
     request.addfinalizer(fin)
     return fixture
 
+@pytest.fixture
+def check_ui(request):
+    return request.config.getoption("--check_ui")
 
-'''Передаётся парсер командной строки
+"""Передаётся парсер командной строки
 Доступ передаётся через объект request
-Доступ передаётся через объект request'''
+Доступ передаётся через объект request"""
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="chrome")
     parser.addoption("--target", action="store", default="target.json")
+    """При store_true автоматически опция False если отсутствует и True если есть"""
+    parser.addoption("--check_ui", action="store_true")
 
 
 """Динамическое связывание тестовой функции с данными,
