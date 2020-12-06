@@ -15,9 +15,9 @@ def test_delete_some_group(app, db, check_ui):
     '''Выступает в роли хеширования количества групп'''
     assert len(old_groups) - 1 == app.group.count_groups()
     new_groups = db.get_group_list()
-
     old_groups.remove(group)
     assert old_groups == new_groups
+
     """Опциональный флаг проверки через UI
     Прописать запуск можно или в консоли или справа вверху Edit_Configuration - Additional arguments (Options) --check_ui"""
     if check_ui:
@@ -25,7 +25,7 @@ def test_delete_some_group(app, db, check_ui):
 
 
 
-"""Список групп берётся из UI"""
+"""Список групп берётся в UI"""
 # def test_delete_some_group(app):
 #     if app.group.count_groups() == 0:
 #         app.group.create(Group(name="test"))

@@ -61,6 +61,7 @@ def stop(request):
 def check_ui(request):
     return request.config.getoption("--check_ui")
 
+
 """Передаётся парсер командной строки
 Доступ передаётся через объект request
 Доступ передаётся через объект request"""

@@ -52,12 +52,31 @@ class ContactHelper:
         self.open_home_page()
         self.contact_cache = None
 
+    def open_contact_to_edit_by_id(self, id):
+        wd = self.app.wd
+        self.app.open_home_page()
+
+        # row = wd.find_elements_by_name("entry").find_element_by_css_selector("input[value='%s']" % id)
+        row = wd.find_element_by_css_selector("input[value='%s']" % id)
+        cell_to_edit = row.find_elements_by_tag_name("td")[7]
+        click_edit = cell_to_edit.find_element_by_tag_name("a").click()
+
     def open_contact_to_edit_by_index(self, index):
         wd = self.app.wd
         self.app.open_home_page()
         row = wd.find_elements_by_name("entry")[index]
         cell_to_edit = row.find_elements_by_tag_name("td")[7]
         click_edit = cell_to_edit.find_element_by_tag_name("a").click()
+
+    def modify_contact_by_id(self, id, data):
+        wd = self.app.wd
+        self.open_contact_to_edit_by_id(id)
+
+        self.fill_contact_form(data)
+        click_update = wd.find_element_by_name("update").click()
+
+        click_home = wd.find_element_by_link_text("home page").click()
+        self.contact_cache = None
 
     def modify_contact_by_index(self, index, data):
         wd = self.app.wd
@@ -116,6 +135,16 @@ class ContactHelper:
     def modify_first_contact(self, data):
         self.modify_contact_by_index(0, data)
 
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        self.select_contact_by_id(id)
+        click_delete = wd.find_element_by_css_selector("#content > form:nth-child(10) > div:nth-child(8) > input[type=button]").click()
+        # wd.switch_to_alert().accept()
+        close_alert = wd.switch_to.alert.accept()
+
+        self.open_home_page()
+        self.contact_cache = None
+
     def delete_contact_by_index(self, index):
         wd = self.app.wd
         self.select_contact_by_index(index)
@@ -128,6 +157,10 @@ class ContactHelper:
 
     def delete_first_contact(self):
         self.delete_contact_by_index(0)
+
+    def select_contact_by_id(self, id):
+        wd = self.app.wd
+        checkbox = wd.find_element_by_css_selector("input[value='%s']" % id).click()
 
     def select_contact_by_index(self, index):
         wd = self.app.wd

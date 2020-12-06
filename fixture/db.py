@@ -31,12 +31,17 @@ class DbFixture:
         try:
             """Остальные параметры добавить позже
             Отсекаем удалённые группы (у них deprecated=дата_удаления"""
-            cursor.execute("select id, firstname, lastname from addressbook where deprecated='0000-00-00 00:00:00'")
+            cursor.execute("select id, firstname, middlename, lastname, nickname, company, title, address, home, mobile, work, "
+                           "fax, email, email2, email3, homepage, address2, phone2, notes from addressbook where deprecated='0000-00-00 00:00:00'")
             for row in cursor:
-                """Присвоится значени сразу в 4 переменные, каждой из них будет присвоен соответствующий элемент картежа"""
-                (id, firstname, lastname) = row
+                """Присвоится значени сразу в все переменные, каждой из них будет присвоен соответствующий элемент картежа"""
+                (id, firstname, middlename, lastname, nickname, company, title, address, home, mobile, work, fax, email, email2,
+                 email3, homepage, address2, phone2, notes) = row
                 """Помещает данные в список"""
-                list.append(Contact(id=str(id), firstname=firstname, lastname=lastname))
+                list.append(Contact(id=str(id), firstname=firstname, middlename=middlename, lastname=lastname, nickname=nickname,
+                                    company=company, title=title, address=address, homephone=home, mobilephone=mobile,
+                                    workphone=work, fax=fax, email=email, email2=email2, email3=email3, homepage=homepage,
+                                    address2=address2, secondaryphone=phone2, notes=notes))
         finally:
             cursor.close()
         return list

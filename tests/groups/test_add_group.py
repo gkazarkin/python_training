@@ -2,8 +2,8 @@
 import pytest
 from model.group import Group
 
-"""Взятие списка групп идёт из базы данных"""
-def test_add_group(app, db, json_groups):
+"""Взятие списка групп из базы данных"""
+def test_add_group(app, db, json_groups, check_ui):
     group = json_groups
     old_groups = db.get_group_list()
     app.group.create(group)
@@ -12,8 +12,13 @@ def test_add_group(app, db, json_groups):
     old_groups.append(group)
     assert sorted(old_groups, key=Group.id_or_max) == sorted(new_groups, key=Group.id_or_max)
 
+    """Опциональный флаг проверки через UI
+        Прописать запуск можно или в консоли или справа вверху Edit_Configuration - Additional arguments (Options) --check_ui"""
+    if check_ui:
+        assert sorted(new_groups, key=Group.id_or_max) == sorted(app.group.get_group_list(), key=Group.id_or_max)
 
-"""Сравнивает список групп через UI"""
+
+"""Сравнивает список групп в UI"""
 # def test_add_group(app, json_groups):
 #     old_groups = app.group.get_group_list()
 #     app.group.create(json_groups)
@@ -24,6 +29,7 @@ def test_add_group(app, db, json_groups):
 #
 #     old_groups.append(json_groups)
 #     assert sorted(old_groups, key=Group.id_or_max) == sorted(new_groups, key=Group.id_or_max)
+
 
 
 
