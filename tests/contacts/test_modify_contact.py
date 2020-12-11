@@ -22,7 +22,8 @@ def test_modify_contact(app, db, check_ui):
     assert len(old_contacts) == app.contact.count_contacts()
 
     new_contacts = db.get_contact_list()
-    assert len(old_groups) == len(new_groups)
+    # old_contacts[index] = contact  # найти,на каком месте в списке old_groups находится тот элемент,который мы модифицируем, и его заменить
+    assert len(old_contacts) == len(new_contacts)
 
     """Опциональный флаг проверки через UI
                 Прописать запуск можно или в консоли или справа вверху Edit_Configuration - Additional arguments (Options) --check_ui"""

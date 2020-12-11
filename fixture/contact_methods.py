@@ -56,10 +56,7 @@ class ContactHelper:
         wd = self.app.wd
         self.app.open_home_page()
 
-        # row = wd.find_elements_by_name("entry").find_element_by_css_selector("input[value='%s']" % id)
-        row = wd.find_element_by_css_selector("input[value='%s']" % id)
-        cell_to_edit = row.find_elements_by_tag_name("td")[7]
-        click_edit = cell_to_edit.find_element_by_tag_name("a").click()
+        click_edit = wd.find_element_by_xpath("//*[@id='maintable']/tbody").find_element_by_xpath("//*[@href='edit.php?id=%s']" % id).click()
 
     def open_contact_to_edit_by_index(self, index):
         wd = self.app.wd
@@ -137,7 +134,7 @@ class ContactHelper:
 
     def delete_contact_by_id(self, id):
         wd = self.app.wd
-        self.select_contact_by_id(id)
+        check_contact = self.select_contact_by_id(id)
         click_delete = wd.find_element_by_css_selector("#content > form:nth-child(10) > div:nth-child(8) > input[type=button]").click()
         # wd.switch_to_alert().accept()
         close_alert = wd.switch_to.alert.accept()
@@ -160,7 +157,7 @@ class ContactHelper:
 
     def select_contact_by_id(self, id):
         wd = self.app.wd
-        checkbox = wd.find_element_by_css_selector("input[value='%s']" % id).click()
+        checkbox = wd.find_element_by_css_selector('input[value="%s"]' % id).click()
 
     def select_contact_by_index(self, index):
         wd = self.app.wd
