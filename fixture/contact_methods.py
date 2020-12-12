@@ -1,6 +1,8 @@
 from selenium.webdriver.support.ui import Select
 from model.contact import Contact
 import re
+from fixture.orm import ORMFixture
+from model.group import Group
 
 class ContactHelper:
     def __init__(self, app):
@@ -42,6 +44,34 @@ class ContactHelper:
                 self.contact_cache.append(Contact(id=id, firstname=firstname, lastname=lastname, address=address,
                                                   all_emails_from_home_page=all_emails, all_phones_from_home_page=all_phones))
         return list(self.contact_cache)
+
+    def add_to_group(self, contact_id, group_id):
+        wd = self.app.wd
+        check_contact = self.select_contact_by_id(contact_id)
+        add_to_group = wd.find_element_by_name("add").click()
+        go_to_group = wd.find_element_by_xpath('//*[@id="content"]/div/i/a[@href="./?group=%s"]' % group_id).click()
+        self.assert_group_url(group_id)
+        check_contact_id = wd.find_element_by_css_selector('input[value="%s"]' % contact_id)
+
+        self.contact_cache = None
+
+    def del_from_group(self, group_id):
+        wd = self.app.wd
+        wd.get("http://localhost/addressbook/?group=%s" % group_id)
+        check_contact = wd.find_element_by_name("selected[]").click()
+        del_contact = wd.find_element_by_name("remove").click()
+        go_to_group = wd.find_element_by_xpath('//*[@id="content"]/div/i/a[@href="./?group=%s"]' % group_id).click()
+        try:
+            check_contact = wd.find_element_by_css_selector('input[value="%s"]' % contact_id).click()
+        except:
+            False
+
+        self.contact_cache = None
+
+    def assert_group_url(self, id):
+        wd = self.app.wd
+        get_group_url = wd.current_url
+        assert get_group_url == "http://localhost/addressbook/?group=%s" % id
 
     def add_new_contact(self, data):
         wd = self.app.wd
@@ -220,6 +250,33 @@ class ContactHelper:
         self.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    def check_contacts_in_group(self, group_id):
+        db = ORMFixture(host="127.0.0.1", name="addressbook", user="root", password="")
+
+        """ Сколько контактов входит в группу"""
+        try:
+            l = db.get_contacts_in_group(Group(id=group_id))
+            assert_group = None
+            if l != "" or []:
+                assert_group = True
+            else:
+                print("There is no contacts in group %s" % group_id)
+                assert_group = False
+            assert assert_group
+            for item in l:
+                print(item)
+            print(len(l))
+        finally:
+            pass
+
+# """ Сколько контактов не входит в группу"""
+# try:
+#     l = db.get_contacts_not_in_group(Group(id="330"))
+#     for item in l:
+#         print(item)
+#     print(len(l))
+# finally:
+#     pass
 
 
 
