@@ -4,7 +4,7 @@ from fixture.contact_methods import ContactHelper
 import re
 from random import randrange
 
-def test_contact_check_main_page_and_edit_page_by_index(app):
+def test_contact_check_main_page_and_edit_page_by_index(app, db):
     if app.contact.count_contacts() == 0:
         app.contact.add_new_contact(
             Contact(firstname="Gleb", middlename="Alex", lastname="Kazarkin", nickname="gkazarkin", title="AccTitle",
@@ -12,18 +12,32 @@ def test_contact_check_main_page_and_edit_page_by_index(app):
                     homephone="515232", mobilephone="89539235812", workphone="367412", fax="89539234611",
                     email="gkazarkin@test.ru", email2="gkazarkin@test.com", homepage="gkazarkin.com", bday="11", bmonth="April", byear="1987", aday="11",
                     amonth="April", ayear="1987", address2="Yakovleva 5", secondaryphone="515232", notes="Test Note"))
-    old_contacts = app.contact.get_contact_list()
+    old_contacts = db.get_contact_list()
     '''Генерируем случайный индекс от 0 до количества контактов'''
-    index = randrange(len(old_contacts))
+    # index = randrange(len(old_contacts))
+    number_groups = len(old_contacts)
+    for i in range(0, number_groups):
+        contact_from_home_page = app.contact.get_contact_list()[i]
+        contact_from_edit_page = app.contact.get_contact_info_from_edit_page(i)
 
-    contact_from_home_page = app.contact.get_contact_list()[index]
-    contact_from_edit_page = app.contact.get_contact_info_from_edit_page(index)
+        assert contact_from_home_page.firstname == contact_from_edit_page.firstname
+        assert contact_from_home_page.lastname == contact_from_edit_page.lastname
+        assert contact_from_home_page.address == contact_from_edit_page.address
+        assert contact_from_home_page.all_phones_from_home_page == merge_phones_like_on_home_page(contact_from_edit_page)
+        assert contact_from_home_page.all_emails_from_home_page == merge_emails_like_on_home_page(contact_from_edit_page)
 
-    assert contact_from_home_page.firstname == contact_from_edit_page.firstname
-    assert contact_from_home_page.lastname == contact_from_edit_page.lastname
-    assert contact_from_home_page.address == contact_from_edit_page.address
-    assert contact_from_home_page.all_phones_from_home_page == merge_phones_like_on_home_page(contact_from_edit_page)
-    assert contact_from_home_page.all_emails_from_home_page == merge_emails_like_on_home_page(contact_from_edit_page)
+    # '''Генерируем случайный индекс от 0 до количества контактов'''
+    # for l in old_contacts:
+    #     return old_contacts.id
+
+    # contact_from_home_page = app.contact.get_contact_list()[index]
+    # contact_from_edit_page = app.contact.get_contact_info_from_edit_page(index)
+    #
+    # assert contact_from_home_page.firstname == contact_from_edit_page.firstname
+    # assert contact_from_home_page.lastname == contact_from_edit_page.lastname
+    # assert contact_from_home_page.address == contact_from_edit_page.address
+    # assert contact_from_home_page.all_phones_from_home_page == merge_phones_like_on_home_page(contact_from_edit_page)
+    # assert contact_from_home_page.all_emails_from_home_page == merge_emails_like_on_home_page(contact_from_edit_page)
 
 
 '''1- Склеиваем при помощи перевода строки, 2- Отфильтровываем пустые строки, 3- Удаляет все лишние символы,
