@@ -19,40 +19,44 @@ def test_contact_check_main_page_and_from_db(app, db):
     assert sorted(contacts_from_db, key=Contact.id_or_max) == sorted(contacts_from_home_page, key=Contact.id_or_max)
 
 
-"""Предыдущая реализация"""
-# '''Генерируем случайный индекс от 0 до количества контактов'''
-# index = randrange(len(old_contacts))
-# for l in old_contacts:
-#     return old_contacts.id
-
-# contact_from_home_page = app.contact.get_contact_list()[index]
-# contact_from_edit_page = app.contact.get_contact_info_from_edit_page(index)
-#
-# assert contact_from_home_page.firstname == contact_from_edit_page.firstname
-# assert contact_from_home_page.lastname == contact_from_edit_page.lastname
-# assert contact_from_home_page.address == contact_from_edit_page.address
-# assert contact_from_home_page.all_phones_from_home_page == merge_phones_like_on_home_page(contact_from_edit_page)
-# assert contact_from_home_page.all_emails_from_home_page == merge_emails_like_on_home_page(contact_from_edit_page)
+    old_contacts = db.get_contact_list()
+    for l in old_contacts:
+        def smth():
+            return old_contacts.id
+    index = randrange(len(old_contacts))
 
 
-# '''1- Склеиваем при помощи перевода строки, 2- Отфильтровываем пустые строки, 3- Удаляет все лишние символы,
-# 4- Отфильтровываются все пусты (None), 5- Исходный список из 4 элементов'''
-# def merge_phones_like_on_home_page(contact):
-#     return "\n".join(
-#         filter(lambda x: x != "",
-#                             map(lambda x: clear(x),
-#                                 filter(lambda x: x is not None,
-#                                        [contact.homephone, contact.mobilephone, contact.workphone, contact.secondaryphone]))))
-#
-# def merge_emails_like_on_home_page(contact):
-#     return "\n".join(
-#         filter(lambda x: x != "",
-#                             map(lambda x: clear(x),
-#                                 filter(lambda x: x is not None,
-#                                        [contact.email, contact.email2, contact.email3]))))
-#
-#
-# '''Отсекаем лишние знаки (скобки, -, пробел и т.д.), "+" не очищаем потому что он виден на главной странице
-# 1 параметр = что заменять, 2 = на что заменять (на пустую строчку ""), 3 = где заменять'''
-# def clear(s):
-#     return re.sub("[() -]", "", s)
+    contact_from_home_page = app.contact.get_contact_list()[index]
+    contact_from_edit_page = app.contact.get_contact_info_from_edit_page(index)
+
+    '''1- Склеиваем при помощи перевода строки, 2- Отфильтровываем пустые строки, 3- Удаляет все лишние символы,
+        4- Отфильтровываются все пусты (None), 5- Исходный список из 4 элементов'''
+
+    def merge_phones_like_on_home_page(contact):
+        return "\n".join(
+            filter(lambda x: x != "",
+                   map(lambda x: clear(x),
+                       filter(lambda x: x is not None,
+                              [contact.homephone, contact.mobilephone, contact.workphone, contact.secondaryphone]))))
+
+    def merge_emails_like_on_home_page(contact):
+        return "\n".join(
+            filter(lambda x: x != "",
+                   map(lambda x: clear(x),
+                       filter(lambda x: x is not None,
+                              [contact.email, contact.email2, contact.email3]))))
+
+    '''Отсекаем лишние знаки (скобки, -, пробел и т.д.), "+" не очищаем потому что он виден на главной странице
+    1 параметр = что заменять, 2 = на что заменять (на пустую строчку ""), 3 = где заменять'''
+
+    def clear(s):
+        return re.sub("[() -]", "", s)
+
+    assert contact_from_home_page.firstname == contact_from_edit_page.firstname
+    assert contact_from_home_page.lastname == contact_from_edit_page.lastname
+    assert contact_from_home_page.address == contact_from_edit_page.address
+    assert contact_from_home_page.all_phones_from_home_page == merge_phones_like_on_home_page(contact_from_edit_page)
+    assert contact_from_home_page.all_emails_from_home_page == merge_emails_like_on_home_page(contact_from_edit_page)
+
+
+
