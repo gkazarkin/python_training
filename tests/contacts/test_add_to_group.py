@@ -7,6 +7,7 @@ import string
 from data.contacts import contact_testdata
 from model.group import Group
 from model.contact import Contact
+from fixture.orm import ORMFixture
 
 def test_add_to_group(app, db, check_ui):
     if len(db.get_contact_list()) == 0:
@@ -23,9 +24,27 @@ def test_add_to_group(app, db, check_ui):
     old_groups = db.get_group_list()
     old_contacts = db.get_contact_list()
 
-    random_group = random.choice(old_groups)
-    random_contact = random.choice(old_contacts)
-    app.contact.add_to_group(contact_id=random_contact.id, group_id=random_group.id)
+    # l = ORMFixture.get_contacts_not_in_group(Group(id="330"))
+
+    try:
+        db = ORMFixture(host="127.0.0.1", name="addressbook", user="root", password="")
+        l = db.get_contacts_not_in_group(Group(id="330"))
+        for item in l:
+            print(item)
+        print(len(l))
+    finally:
+        pass
+
+    app.contact.add_to_group(contact_id=l[0].id, group_id="330")
+    try:
+        l = db.get_contacts_in_group(Group(id="330"))
+        for item in l:
+            print(item)
+        assert (len(l)) > 0
+        print(len(l))
+    finally:
+        pass
+
     new_contacts = db.get_contact_list()
     assert len(old_contacts) == len(new_contacts)
 

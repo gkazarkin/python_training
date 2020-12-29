@@ -2,7 +2,9 @@ from fixture.contact_methods import ContactHelper
 import random
 import string
 from data.contacts import contact_testdata
-
+from model.group import Group
+from model.contact import Contact
+from fixture.orm import ORMFixture
 
 """Ещё не доделан"""
 def test_del_from_group(app, db, check_ui):
@@ -19,11 +21,18 @@ def test_del_from_group(app, db, check_ui):
 
     old_groups = db.get_group_list()
     old_contacts = db.get_contact_list()
-    random_group = random.choice(old_groups)
-    random_contact = random.choice(old_contacts)
+
+    try:
+        db = ORMFixture(host="127.0.0.1", name="addressbook", user="root", password="")
+        l = db.get_contacts_in_group(Group(id="330"))
+        for item in l:
+            print(item)
+        assert (len(l)) > 0
+        print(len(l))
+    finally:
+        pass
 
     """Указывается ID группы"""
-    app.contact.check_contacts_in_group("330")
     # app.contact.del_from_group(group_id=random_group.id)
     app.contact.del_from_group(group_id=330)
     new_contacts = db.get_contact_list()
